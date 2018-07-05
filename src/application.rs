@@ -126,7 +126,8 @@ where
     type Result = AsyncResult<HttpResponse>;
 
     fn handle(&mut self, req: HttpRequest<S>) -> AsyncResult<HttpResponse> {
-        let idx = if let Some(path) = req.match_info().get("tail") {
+        let idx = if let Some(full_path) = req.match_info().get("tail") {
+            let path = full_path.get(1..).unwrap_or("");
             if path.is_empty() {
                 return HttpResponse::Ok()
                     .content_type("text/plain; charset=UTF-8")
